@@ -1,0 +1,118 @@
+openapi: 3.0.0
+info:
+  title: Spotify Clone API
+  version: 1.0.0
+  description: API for a Spotify clone app
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /users/{userId}/profile:
+    get:
+      summary: Get user profile information
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: string
+          example: 12345
+      responses:
+        '200':
+          description: Successful retrieval of user profile information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetUserInfo"
+        '401':
+          description: Unauthorized - User not logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetInfoError"
+                
+  /users/{userId}/update:
+    put:
+      summary: Update user profile information
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserInfo"
+      responses:
+        '200':
+          description: User profile information updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetInfoError"
+        '400':
+          description: Bad request - Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updateError'
+
+components:
+  schemas: 
+    GetUserInfo:
+      type: object
+      properties:
+        userName:
+          type: string
+          description: Name of the user
+          example: john_doe
+        emailId:
+          type: string
+          description: emailId of the user
+          format: email
+          example: john_doe@example.com
+        mobileNum:
+          type: string
+          description: mobile number of the user
+          example: +1 123-456-7890
+
+    GetInfoError:
+      type: object
+      properties: 
+        message:
+          type: string
+          description: Unable to retrieve user info
+          examples: 
+            - User Info not available
+
+    updateError:
+      type: object
+      properties: 
+        message:
+          type: string
+          description: Unable to update user info
+          examples: 
+            - Unable to update user info
+            
+    UpdateUserInfo:
+      type: object
+      properties:
+        userName:
+          type: string
+          description: Name of the user
+          example: john_doe_updated
+        emailId:
+          type: string
+          format: email
+          description: emailId of the user
+          example: john_doe_updated@example.com
+        mobileNum:
+          type: string
+          description: Mobile Number of the user
+          example: +1 987-654-3210
+      required: 
+        - userName
+        - emailId
+        - mobileNum

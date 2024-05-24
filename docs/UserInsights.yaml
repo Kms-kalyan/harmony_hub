@@ -1,0 +1,81 @@
+openapi: 3.1.0
+info:
+  title: User Insights API
+  description: Manages user-driven insights for songs
+  version: 'v1.0'
+paths:
+  /api/insights/{songId}:
+    get:
+      parameters:
+        - name: songId
+          in: path
+          required: true
+          description: The ID of the song
+          schema:
+           type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/UserInsightsResponse'
+    post:
+      summary: Add user insights for a specific song
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/UserInsight'
+      responses:
+        '201':
+          description: Successful creation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/UserInsightsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    UserInsight:
+      type: object
+      properties:
+        user:
+          type: string
+          description: The name of the user
+        timestamp:
+          type: string
+          format: date-time
+          description: The timestamp of the insight
+        comment:
+          type: string
+          description: The user's comment
+
+    UserInsightsResponse:
+      type: object
+      properties:
+        insights:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserInsight'
+          description: List of user insights for the song
+
+    ErrorResponse:
+      type: object
+      properties: 
+        error:
+          type: string
+          description: Error description
+          examples: 
+            - Invalid request. Please check your parameters.

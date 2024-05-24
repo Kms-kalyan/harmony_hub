@@ -1,0 +1,98 @@
+openapi: 3.1.0
+info:
+  title: Colloboration API
+  description: Rest API to join or leave a collab room.
+  version: 'v1.0'
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/collaboration/{playlistId}/leave:
+    post:
+      operationId: leave-collaboration
+      description: Leave a playlist collaboration
+      parameters: 
+        - name: playlistId
+          description: The ID of the playlist to leave
+          in: path
+          required: true
+          example: sgdn-243n4-242fsf
+          schema:
+            type: string
+      requestBody: 
+        description: User information for leaving the collaboration
+        required: true
+        content: 
+          application/json: 
+            schema: 
+              $ref: "#/components/schemas/LeaveRequest"
+      
+      responses: 
+        "200":
+          description: Joined Successfully
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                $ref: "#/components/schemas/SuccessResponse"
+        
+        "404":
+          description: Playlist not found
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                $ref: "#/components/schemas/ErrorResponse"
+        
+        "400":
+          description: Bad Request
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                $ref: "#/components/schemas/ErrorResponse"
+          
+              
+      
+components:
+  schemas: 
+    LeaveRequest:
+      type: object
+      properties: 
+        userId:
+          type: string
+          description: The ID of the user joining the collaboration
+          examples: 
+            - sgdn-243n4
+        userName:
+          type: string
+          description: Username of the user joining
+          examples: 
+            - zulu_itachi7
+      required: 
+        - userId
+        - userName
+    
+    SuccessResponse:
+      type: object
+      properties: 
+        message:
+          type: string
+          description: A success message
+          examples: 
+            - User successfully left the collaboration
+    
+    ErrorResponse:
+      type: object
+      properties: 
+        error:
+          type: string
+          description: Error description
+          examples: 
+            - Invalid request. Please check your parameters.
+
+
+
+
+
+        
+  

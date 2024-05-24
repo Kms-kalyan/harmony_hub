@@ -1,0 +1,11 @@
+{
+    "title":"HARMONY HUB",
+    "home.button.label":"HOME",
+    "playlist.button.label":"PLAYLISTS",
+    "createplaylist.button.label":"CREATE PLAYLIST",
+    "sessions.button.label":"SESSIONS",
+    "createsession.button.label":"CREATE SESSION",
+    "username.text.label":"USERNAME",
+    "password.text.label":"PASSWORD",
+    "login.button.label":"LOGIN"
+}

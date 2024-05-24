@@ -1,0 +1,180 @@
+openapi: 3.0.0
+info:
+  title: Music Playlist API
+  version: "1.0.0"
+  description: API to get details of a specific playlist for a user, API to update an existing playlist, API to delete a playlist
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /users/{userId}/playlists/{playlistId}:
+    get:
+      summary: Get details of a specific playlist
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+        - name: playlistId
+          in: path
+          required: true
+          description: The ID of the playlist
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                id: 1
+                name: "My Favorites"
+                description: "A collection of my all-time favorite songs"
+                tracks:
+                  - title: "Song 1"
+                    artist: "Artist 1"
+                  - title: "Song 2"
+                    artist: "Artist 2"
+        '404':
+          description: Playlist not found
+          content:
+            application/json:
+              example:
+                error: "Playlist not found"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                error: "Internal Server Error"
+      security:
+        - apiKey: []
+
+    put:
+      summary: Update an existing playlist
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+        - name: playlistId
+          in: path
+          required: true
+          description: The ID of the playlist to update
+          schema:
+            type: integer
+      requestBody:
+        description: Updated playlist details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedPlaylist'
+      responses:
+        '200':
+          description: Playlist updated successfully
+          content:
+            application/json:
+              example:
+                id: 123
+                name: "Updated Playlist"
+                description: "An updated description of the playlist"
+                tracks:
+                  - title: "Updated Song 1"
+                    artist: "Updated Artist 1"
+                  - title: "Updated Song 2"
+                    artist: "Updated Artist 2"
+        '404':
+          description: Playlist not found
+          content:
+            application/json:
+              example:
+                error: "Playlist not found"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              example:
+                error: "Invalid request payload"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                error: "Internal Server Error"
+      security:
+        - apiKey: []
+
+    delete:
+      summary: Delete an existing playlist
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+        - name: playlistId
+          in: path
+          required: true
+          description: The ID of the playlist to delete
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Playlist deleted successfully
+        '404':
+          description: Playlist not found
+          content:
+            application/json:
+              example:
+                error: "Playlist not found"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                error: "Internal Server Error"
+      security:
+        - apiKey: []
+
+components:
+  schemas:
+    PlaylistDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        tracks:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              artist:
+                type: string
+    UpdatedPlaylist:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        tracks:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              artist:
+                type: string

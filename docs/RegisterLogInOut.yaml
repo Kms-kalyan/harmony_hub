@@ -1,0 +1,161 @@
+openapi: 3.0.0
+info:
+  title: Spotify Clone API
+  version: 1.0.0
+  description: API for a Spotify clone app
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /users/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewRegistration"
+      responses:
+        '201':
+          description: User registered successfully
+          content: 
+            application/json: 
+              schema:
+                $ref: "#/components/schemas/RegistrationSuccess"
+        '400':
+          description: Bad request - Invalid input
+          content: 
+            application/json: 
+              schema:
+                $ref: "#/components/schemas/RegistrationError"
+
+  /users/login:
+    post:
+      summary: Log in a user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogIn'
+      responses:
+        '200':
+          description: User logged in successfully
+          content: 
+            application/json: 
+              schema:
+                $ref: "#/components/schemas/LogInSuccess"
+        '401':
+          description: Unauthorized - Invalid credentials
+          content: 
+            application/json: 
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /users/logout:
+    post:
+      summary: Log out a user
+      tags:
+        - Users
+      responses:
+        '200':
+          description: User logged out successfully
+          content: 
+            application/json: 
+              schema:
+                $ref: "#/components/schemas/LogOutSuccess"
+        '401':
+          description: Unauthorized - User not logged in
+          content: 
+            application/json: 
+              schema:
+                $ref: "#/components/schemas/LogOutErrorResponse"
+
+components:
+  schemas: 
+    NewRegistration:
+      type: object
+      properties:
+        userName:
+          type: string
+          description : UserName of the new user
+          example: john_doe
+        password:
+          type: string
+          description: Password of the new user
+          example: secure_password
+      required: 
+        - userName
+        - password
+    
+    RegistrationSuccess:
+      type: object
+      properties: 
+        message:
+          type: string
+          description: User registration succesful
+          examples: 
+            - User successfully registered
+    
+    RegistrationError:
+      type: object
+      properties: 
+        message:
+          type: string
+          description: User registration error
+          examples: 
+            - User registration error
+    
+    LogInSuccess:
+      type: object
+      properties: 
+        message:
+          type: string
+          description: User successfully logged in
+          examples: 
+            - User successfully Logged in
+    
+    LogOutSuccess:
+      type: object
+      properties: 
+        message:
+          type: string
+          description: User successfully logged out
+          examples: 
+            - User successfully Logged out
+
+    ErrorResponse:
+      type: object
+      properties: 
+        error:
+          type: string
+          description: Error description
+          examples: 
+            - Invalid request. Please check your parameters.
+
+    LogOutErrorResponse:
+      type: object
+      properties: 
+        error:
+          type: string
+          description: Error description
+          examples: 
+            - User unable to logout
+    
+    LogIn:
+      type: object
+      properties:
+        userName:
+          type: string
+          example: john_doe
+        password:
+          type: string
+          example: secure_password
+      required:
+        - userName
+        - password

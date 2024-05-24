@@ -1,0 +1,28 @@
+
+asyncapi: 2.0.0
+info:
+  title: Collaborative Session API
+  version: "1.0.0"
+  description: WebSocket API for real-time communication during collaborative sessions
+
+channels:
+  /collaborative-session:
+    publish:
+      summary: Send a message to the collaborative session
+      message:
+        $ref: '#/components/messages/Message'
+    subscribe:
+      summary: Receive messages from the collaborative session
+      message:
+        $ref: '#/components/messages/Message'
+
+components:
+  messages:
+    Message:
+      payload:
+        type: object
+        properties:
+          sender:
+            type: string
+          content:
+            type: string

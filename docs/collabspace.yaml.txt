@@ -1,0 +1,152 @@
+openapi: 3.1.0
+info:
+  title: Colloboration API
+  description: Rest API for collab room.
+  version: 'v1.0'
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/collaborative-spaces:
+    post:
+      operationId: create-new-collab-space
+      description: create a new collab space
+      requestBody: 
+        description: Collaborative space details
+        required: true
+        content: 
+          application/json: 
+            schema: 
+              $ref: "#/components/schemas/CreateCollaborativeSpaceRequest"
+      
+      responses: 
+        "201":
+          description: Collaborative space created successfully
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                $ref: "#/components/schemas/CollaborativeSpace"
+        
+        "404":
+          description: Collab space not found
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                $ref: "#/components/schemas/ErrorResponse"
+        
+        "400":
+          description: Bad Request
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                $ref: "#/components/schemas/ErrorResponse"
+
+    get: 
+      operationId: get-collaborative-spaces
+      description: Get a list of user's collaborative spaces
+      responses: 
+        "200":
+          description: Successful Request
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                properties: 
+                  collaborativespaces:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/CollaborativeSpace'
+                    examples: 
+                      - spaceId: "123"
+                        spaceName: "Project A"
+                        description: "A collaboration space for Project A"
+                        members:
+                          - userId: user1
+                            userName: john_doe
+                          - userId: user2
+                            userName: john_smith
+                      - spaceId: "12345"
+                        spaceName: "Project B"
+                        description: "A collaboration space for Project B"
+                        members:
+                          - userId: user1
+                            userName: john_doe
+ 
+      
+components:
+  schemas: 
+    CreateCollaborativeSpaceRequest:
+      type: object
+      properties: 
+        spaceName:
+          type: string
+          description: The name of the collaborative space
+          examples: 
+            - collabspace
+        collabdescription:
+          type: string
+          description: Description of the collaborative space
+          examples: 
+            - A collaboration space for a new project
+
+      required: 
+        - spaceName
+        - collabdescription
+    
+    CollaborativeSpace:
+      type: object
+      properties: 
+        spaceId:
+          type: string
+          description: The ID of the collaborative space
+          examples: 
+            - gdn-243n4
+            - alsdalsd
+        spaceName:
+          type: string
+          description: The name of the collaborative space
+          examples: 
+            - spaceA
+            - space B
+        spaceDescription:
+          type: string
+          description: Description of the collaborative space
+          examples: 
+            - A collaboration space for Project A
+        members:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Member'
+    
+    ErrorResponse:
+      type: object
+      properties: 
+        error:
+          type: string
+          description: Error description
+          examples: 
+            - Invalid request. Please check your parameters.
+    
+    Member:
+      type: object
+      properties: 
+        userId:
+          type: string
+          description: User Id
+          examples: 
+            - gdn-243n4
+        userName:
+          type: string
+          description: User Name
+          examples: 
+            - zulu_itachi7
+
+
+
+
+
+
+        
+  

@@ -1,0 +1,89 @@
+openapi: 3.1.0
+info:
+  title: Song Information API
+  description: API to retrieve detailed information about a specific song.
+  version: 'v1.0'
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/songs/{songId}: 
+    get:
+      parameters:
+        - name: songId
+          in: path
+          required: true
+          description: The unique identifier of the song.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/SongInfo'
+        '404':
+          description: Song not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/NotFoundError'
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/InternalServerError'
+
+components:
+  schemas:
+    SongInfo:
+      type: object
+      properties:
+        songId:
+          type: string
+          description: The unique identifier of the song.
+        title:
+          type: string
+          description: The title of the song.
+        artist:
+          type: string
+          description: The artist of the song.
+        album:
+          type: string
+          description: The album of the song.
+        releaseDate:
+          type: string
+          format: date
+          description: The release date of the song.
+        genre:
+          type: string
+          description: The genre of the song.
+        insights:
+          type: object
+          properties:
+            userRating:
+              type: number
+              description: The user rating of the song.
+            comments:
+              type: array
+              items:
+                type: string
+              description: User comments about the song.
+
+    NotFoundError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error message for a not found scenario.
+
+    InternalServerError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error message for an internal server error.

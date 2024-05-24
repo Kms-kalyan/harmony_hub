@@ -1,0 +1,48 @@
+openapi: 3.0.0
+info:
+  title: Music Playlist API
+  version: "1.0.0"
+  description: API to delete a song from an existing playlist
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /users/{userId}/playlists/{playlistId}/songs/{songId}:
+    delete:
+      summary: Delete a song from an existing playlist
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+        - name: playlistId
+          in: path
+          required: true
+          description: The ID of the playlist from which the song will be deleted
+          schema:
+            type: integer
+        - name: songId
+          in: path
+          required: true
+          description: The ID of the song to be deleted
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Song deleted successfully
+        '404':
+          description: User, playlist, or song not found
+          content:
+            application/json:
+              example:
+                error: "User, playlist, or song not found"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                error: "Internal Server Error"
+      security:
+        - apiKey: []

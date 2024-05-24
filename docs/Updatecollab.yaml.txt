@@ -1,0 +1,175 @@
+openapi: 3.1.0
+info:
+  title: Colloboration API
+  description: Rest API for collab room.
+  version: 'v1.0'
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/collaborative-spaces/{spaceId}:
+    put:
+      operationId: update-collaborative-space
+      description: Update details of a specific collaborative space
+      parameters: 
+        - name: spaceId
+          in: path
+          required: true
+          description: The Id of collab space
+          schema: 
+            type: string
+            examples: 
+              - gdn-243n4
+      requestBody: 
+        description: Updated collaborative space details
+        required: true
+        content: 
+          application/json: 
+            schema: 
+              $ref: "#/components/schemas/UpdateCollaborativeSpaceRequest"
+      
+      responses: 
+        "200":
+          description: Collaborative space updated successfully
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                $ref: "#/components/schemas/CollaborativeSpace"
+        
+        "404":
+          description: Collab space not found
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                $ref: "#/components/schemas/ErrorResponse"
+        
+        "400":
+          description: Bad Request
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                $ref: "#/components/schemas/ErrorResponse"
+
+    delete: 
+      operationId: delete-collaborative-space
+      description: Delete a specific collaborative space
+      parameters: 
+        - name: spaceId
+          in: path
+          required: true
+          description: The Id of collab space to delete
+          schema: 
+            type: string
+            examples: 
+              - gdn-243n4
+
+      responses: 
+        "204":
+          description: Successfully deleted
+          content: 
+            application/json: 
+              schema: 
+                $ref: '#/components/schemas/DeleteResponse'
+        "404":
+          description: Collab space not found
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                $ref: "#/components/schemas/ErrorResponse"
+                
+        "400":
+          description: Bad Request
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                $ref: "#/components/schemas/ErrorResponse"              
+                    
+ 
+      
+components:
+  schemas: 
+    UpdateCollaborativeSpaceRequest:
+      type: object
+      properties: 
+        spaceName:
+          type: string
+          description: The updated name of the collaborative space
+          examples: 
+            - collabspace
+        collabdescription:
+          type: string
+          description: The updated description of the collaborative space
+          examples: 
+            - A collaboration space for a new project
+
+      required: 
+        - spaceName
+        - collabdescription
+    
+    CollaborativeSpace:
+      type: object
+      properties: 
+        spaceId:
+          type: string
+          description: The ID of the collaborative space
+          examples: 
+            - gdn-243n4
+            - alsdalsd
+        spaceName:
+          type: string
+          description: The name of the collaborative space
+          examples: 
+            - spaceA
+            - space B
+        spaceDescription:
+          type: string
+          description: Description of the collaborative space
+          examples: 
+            - A collaboration space for Project A
+        members:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Member'
+    
+    ErrorResponse:
+      type: object
+      properties: 
+        error:
+          type: string
+          description: Error description
+          examples: 
+            - Invalid request. Please check your parameters.
+    DeleteResponse:
+      type: object
+      properties: 
+        message:
+          type: string
+          description: message description
+          examples: 
+            - Space successfully deleted
+    
+    Member:
+      type: object
+      properties: 
+        userId:
+          type: string
+          description: User Id
+          examples: 
+            - gdn-243n4
+        userName:
+          type: string
+          description: User Name
+          examples: 
+            - zulu_itachi7
+
+
+
+
+
+
+        
+  
